@@ -6,8 +6,11 @@ class Solution232 {
     static class MyQueue {
         private Stack<Integer> data;
         private Stack<Integer> dataHelper;
+        private int front;
 
-        /** Initialize your data structure here. */
+        /**
+         * Initialize your data structure here.
+         */
 
         //1,2,3,4
         public MyQueue() {
@@ -15,12 +18,19 @@ class Solution232 {
             dataHelper = new Stack<>();
         }
 
-        /** Push element x to the back of queue. */
+        /**
+         * Push element x to the back of queue.
+         */
         public void push(int x) {
+            if (data.isEmpty()) {
+                front = x;
+            }
             data.push(x);
         }
 
-        /** Removes the element from in front of queue and returns that element. */
+        /**
+         * Removes the element from in front of queue and returns that element.
+         */
         public int pop() {
             if (data.isEmpty()) {
                 throw new RuntimeException("queue is empty.");
@@ -30,28 +40,21 @@ class Solution232 {
             }
             int value = dataHelper.pop();
             while (!dataHelper.isEmpty()) {
-                data.push(dataHelper.pop());
+                push(dataHelper.pop());
             }
             return value;
         }
 
-        /** Get the front element. */
+        /**
+         * Get the front element.
+         */
         public int peek() {
-            if (data.isEmpty()) {
-                throw new RuntimeException("queue is empty.");
-            }
-            while (!data.isEmpty()) {
-                dataHelper.push(data.pop());
-            }
-            int value = dataHelper.peek();
-            while (!dataHelper.isEmpty()) {
-                data.push(dataHelper.pop());
-            }
-
-            return value;
+            return front;
         }
 
-        /** Returns whether the queue is empty. */
+        /**
+         * Returns whether the queue is empty.
+         */
         public boolean empty() {
             return data.isEmpty();
         }
