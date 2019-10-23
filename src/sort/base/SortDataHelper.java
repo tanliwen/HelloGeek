@@ -1,4 +1,4 @@
-package sort;
+package sort.base;
 
 /**
  * 待排序数据模拟生成
