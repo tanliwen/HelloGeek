@@ -2,19 +2,22 @@ package next;
 
 import framework.L;
 
-public class ThreadInterruptTest {
+public class ThreadInterruptExceptionTest {
 
     public static class ExtendThread extends Thread {
         @Override
         public void run() {
-            L.d("I am ExtendThread before is " + isInterrupted());
-//            while (true) {
-//            while (!Thread.interrupted()) {
             while (!isInterrupted()) {
-//                L.d("I am ExtendThread");
-                L.d("I am ExtendThread inner is " + isInterrupted());
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    //isInterrupted 会被改成false
+                    e.printStackTrace();
+                }
+                L.d("I am inner is " + isInterrupted());
             }
-            L.d("I am ExtendThread end is " + isInterrupted());
+
+            L.d("I am end is " + isInterrupted());
         }
     }
 
@@ -22,14 +25,11 @@ public class ThreadInterruptTest {
         Thread thread = new ExtendThread();
         thread.start();
 
-
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         thread.interrupt();
-
-        thread.start();
     }
 }
