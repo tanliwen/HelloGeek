@@ -24,7 +24,7 @@ class Solution27 {
     public static void main(String[] args) {
         Solution27 solution27 = new Solution27();
         int[] nums = new int[]{0, 1, 2, 2, 3, 0, 4, 2};
-        var len = solution27.removeElement(nums, 3);
+        int len = solution27.removeElement(nums, 3);
         for (int i = 0; i < len; i++) {
             System.out.print(nums[i] + ",");
         }

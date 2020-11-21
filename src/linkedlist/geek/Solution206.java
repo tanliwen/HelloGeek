@@ -1,99 +1,43 @@
 package linkedlist.geek;
 
+import java.util.*;
 
-class Solution206 {
+public class Solution206 {
 
     public static class ListNode {
         int val;
         ListNode next;
+
         ListNode(int x) {
             val = x;
         }
     }
-    public ListNode addBeforeHead(ListNode head, ListNode newNode) {
-        if (newNode == null) {
-            return null;
-        }
+    //current  next       flag
+    //1     ->  2        ->       3       ->         4
 
-        if (head == null) {
-            return newNode;
-        }
+    //current      next
+    //null <-  1     ->    2        ->       3       ->         4
 
-        newNode.next = head;
-
-        return newNode;
-    }
-
-    public void deletedEnd(ListNode head) {
-        ListNode temp = head;
-
-        if (temp == null) {
-            return;
-        }
-        //1, 2, -1
-        while (temp.next.next != null) {
-            temp = temp.next;
-        }
-        ListNode removed = temp.next;
-        removed.next = null;
-        removed = null;
-        temp.next = null;
-    }
+    //current          next
+    //null <-  1     <-     2         ->      3
 
     public ListNode reverseList(ListNode head) {
-        if (head == null) {
-            return null;
-        }
-        if (head.next == null) {
+        if (head == null || head.next == null) {
             return head;
         }
 
-        ListNode newHead = new ListNode(-1);
-
-        ListNode temp = head;
-
-        while (temp != null) {
-            newHead = addBeforeHead(newHead, new ListNode(temp.val));
-            temp = temp.next;
+        ListNode current = null;
+        ListNode next = head;
+        while (next.next != null) {
+            ListNode flag = next.next;
+            next.next = current;
+            current = next;
+            next = flag;
         }
-        deletedEnd(newHead);
-        return newHead;
+        next.next = current;
+        return next;
     }
 
-    public ListNode reverseList2(ListNode head) {
-        if (head == null) {
-            return null;
-        }
-        if (head.next == null) {
-            return head;
-        }
-
-        //1 -> 2 - > 3 -> null
-        //null <- 1 <- 2 <- 3
-
-        ListNode current = head;
-        ListNode prev = null;
-        while (current != null) {
-            ListNode temp = current.next;
-            current.next = prev;
-            prev = current;
-            current = temp;
-        }
-        return prev;
-    }
-
-
-    public ListNode reverseList3(ListNode head) {
-        ListNode current = head;
-        ListNode pre = null;
-        while (current != null) {// 1, 2 ,3
-            ListNode temp = current.next;
-            current.next = pre;
-            pre = current;
-            current = temp;
-        }
-        return pre;
-    }
     void printAll(ListNode head) {
         ListNode temp = head;
         while (temp != null) {
@@ -103,16 +47,95 @@ class Solution206 {
         System.out.println();
     }
 
+
+    public ListNode reverse(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode current = null;
+        ListNode next = head.next;
+
+        while (next != null) {
+            ListNode nextNext = next.next;
+            if (nextNext == null) {
+                break;
+            } else {
+                next.next = current;
+                current = next;
+                next = nextNext;
+            }
+        }
+        next.next = current;
+        return next;
+    }
+
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        ListNode reverseHead = reverse(head);
+        ListNode newHead = reverseHead;
+        int index = 1;
+        while (reverseHead != null) {
+            if (index == k) {
+                reverseHead.next = null;
+                return reverse(newHead);
+            } else {
+                index++;
+                reverseHead = reverseHead.next;
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         Solution206 solution = new Solution206();
         ListNode head = new ListNode(1);
         ListNode test1 = new ListNode(2);
-        ListNode test2 = new ListNode(-1);
+        ListNode test2 = new ListNode(3);
+        ListNode test3 = new ListNode(4);
         head.next = test1;
         test1.next = test2;
-        test2.next = null;
+        test2.next = test3;
+        test3.next = null;
         solution.printAll(head);
 
-        solution.printAll(solution.reverseList3(head));
+        solution.printAll(solution.reverse(head));
+    }
+
+    private int[] mapToArrays(Set<Integer> set) {
+        if (set.size() == 0) {
+            return null;
+        }
+        int[] array = new int[set.size()];
+        int index = 0;
+        for (int value : set) {
+            array[index++] = value;
+        }
+        return array;
+    }
+
+    // 1 2 2 1
+    // 2
+    public int[] intersection2(int[] nums1, int[] nums2) {
+        if (nums1 == null || nums2 == null) {
+            return null;
+        }
+        if (nums1.length < nums2.length) {
+            int[] temp = nums1;
+            nums1 = nums2;
+            nums2 = temp;
+        }
+
+        Set<Integer> set = new HashSet<>(nums1.length);
+        for (int value : nums1) {
+            set.add(value);
+        }
+
+        Set<Integer> result = new HashSet<>(nums2.length);
+        for (int current : nums2) {
+            if (set.contains(current)) {
+                result.add(current);
+            }
+        }
+//        return  result.stream().mapToInt(Integer::intValue).toArray();
+        return mapToArrays(result);
     }
 }

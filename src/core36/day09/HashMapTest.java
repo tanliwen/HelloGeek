@@ -18,7 +18,15 @@ import java.util.HashMap;
  */
 public class HashMapTest {
 
-    static void testForHash() {
+    static void test() {
+        int hashCode = 1000;
+        int h;
+
+        int index  = (h = hashCode) ^ h >>> 16;
+        System.out.print(index);
+    }
+
+    static void test2() {
         HashMap<Object, String> map = new HashMap<>();
 
         ClassA a = new ClassA("key");
@@ -27,14 +35,11 @@ public class HashMapTest {
 
         map.put(a, "1");
 //        map.put(b, "2");
-
-
 //        System.out.println(map.get(a));
 //        System.out.println(map.get(b));
-
     }
 
     public static void main(String[] args) {
-        testForHash();
+        test();
     }
 }
